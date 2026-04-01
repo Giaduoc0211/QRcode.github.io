@@ -34,6 +34,7 @@
       color: #111;
       font-weight: 700;
       margin-top: 12px;
+      display: none;
     }
     audio {
       width: 100%;
@@ -45,7 +46,7 @@
   <div class="box">
     <h1>Mở audio</h1>
     <p id="status">Đang thử tự phát audio...</p>
-    <button id="playBtn" style="display:none">Bấm để phát</button>
+    <button id="playBtn">Bấm để phát</button>
     <audio id="audio" autoplay playsinline controls>
       <source src="audio.aac" type="audio/aac" />
       Trình duyệt của bạn không hỗ trợ audio.
@@ -56,28 +57,44 @@
     const audio = document.getElementById('audio');
     const status = document.getElementById('status');
     const playBtn = document.getElementById('playBtn');
+    let started = false;
+    let blocked = false;
 
-    async function tryPlay() {
+    async function doPlay() {
+      if (started) return true;
       try {
         await audio.play();
+        started = true;
         status.textContent = 'Đang phát audio.';
+        playBtn.style.display = 'none';
+        return true;
       } catch (err) {
-        status.textContent = 'Trình duyệt chặn tự phát. Bấm nút bên dưới để phát.';
-        playBtn.style.display = 'inline-block';
+        return false;
       }
     }
 
-    playBtn.addEventListener('click', async () => {
-      try {
-        await audio.play();
-        status.textContent = 'Đang phát audio.';
-        playBtn.style.display = 'none';
-      } catch (err) {
-        status.textContent = 'Thiết bị này không phát được audio.';
+    async function tryAutoPlay() {
+      const ok = await doPlay();
+      if (!ok) {
+        blocked = true;
+        status.textContent = 'Trình duyệt chặn tự phát.';
       }
-    });
+    }
 
-    window.addEventListener('load', tryPlay);
+    async function handleGesture() {
+      if (!blocked || started) return;
+      const ok = await doPlay();
+      if (!ok) {
+        playBtn.style.display = 'inline-block';
+        status.textContent = 'Không tự phát được. Bấm nút để phát.';
+      }
+    }
+
+    playBtn.addEventListener('click', doPlay);
+    window.addEventListener('load', tryAutoPlay);
+    document.addEventListener('click', handleGesture, true);
+    document.addEventListener('touchstart', handleGesture, true);
+    document.addEventListener('pointerdown', handleGesture, true);
   </script>
 </body>
 </html>
