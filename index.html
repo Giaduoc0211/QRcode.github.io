@@ -6,95 +6,71 @@
   <title>Phát audio</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    html, body {
-      width: 100%;
-      margin: 0;
-      padding: 0;
-    }
-
     body {
+      margin: 0;
       font-family: system-ui, sans-serif;
-      min-height: 100vh;
       min-height: 100dvh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       overflow: hidden;
 
-      /* Background tương thích PC và điện thoại */
-      background-image: url("canhchim.jpg");
-      background-position: center center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-attachment: scroll;
+      background: url("canhchim.jpg") no-repeat center/cover;
     }
 
-    .box {
+    /* container full màn hình */
+    .container {
+      position: relative;
       width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 24px;
+      height: 100dvh;
     }
 
+    /* nút */
     button {
-      appearance: none;
-      -webkit-appearance: none;
+      position: absolute;
+
+      /* 🔥 chỉnh vị trí tại đây */
+      top: 18%;          /* kéo lên cao */
+      left: 50%;
+      transform: translateX(-50%);
+
+      padding: 14px 24px;
+      font-size: 18px;
+      font-weight: bold;
       border: none;
+      border-radius: 14px;
       cursor: pointer;
 
-      padding: 16px 28px;
-      font-size: 20px;
-      font-weight: 700;
-      border-radius: 16px;
-
-      background: rgba(0, 0, 0, 0.55);
+      background: rgba(0, 0, 0, 0.6);
       color: #fff;
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
 
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-      transition: transform 0.2s ease, background 0.2s ease;
+      backdrop-filter: blur(6px);
+      transition: 0.2s;
     }
 
     button:hover {
-      transform: scale(1.05);
-      background: rgba(0, 0, 0, 0.72);
-    }
-
-    button:active {
-      transform: scale(0.98);
+      transform: translateX(-50%) scale(1.05);
+      background: rgba(0,0,0,0.8);
     }
 
     audio {
       display: none;
     }
 
+    /* 📱 mobile chỉnh lại chút */
     @media (max-width: 768px) {
-      .box {
-        padding: 20px;
-      }
-
       button {
-        width: min(90vw, 320px);
-        padding: 15px 22px;
-        font-size: 18px;
-        border-radius: 14px;
+        top: 12%;   /* mobile kéo cao hơn nữa */
+        font-size: 16px;
+        padding: 12px 20px;
       }
     }
   </style>
 </head>
+
 <body>
-  <div class="box">
+  <div class="container">
     <button id="playBtn">Bấm để phát</button>
 
     <audio id="audio">
       <source src="audio.aac" type="audio/aac" />
-      Trình duyệt của bạn không hỗ trợ audio.
     </audio>
   </div>
 
@@ -103,21 +79,13 @@
     const playBtn = document.getElementById('playBtn');
 
     playBtn.addEventListener('click', async () => {
-      try {
-        if (audio.paused) {
-          await audio.play();
-          playBtn.textContent = 'Đang phát';
-        } else {
-          audio.pause();
-          playBtn.textContent = 'Bấm để phát';
-        }
-      } catch (e) {
-        playBtn.textContent = 'Không phát được';
+      if (audio.paused) {
+        await audio.play();
+        playBtn.textContent = "Đang phát";
+      } else {
+        audio.pause();
+        playBtn.textContent = "Bấm để phát";
       }
-    });
-
-    audio.addEventListener('ended', () => {
-      playBtn.textContent = 'Bấm để phát';
     });
   </script>
 </body>
