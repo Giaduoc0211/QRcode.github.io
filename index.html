@@ -38,110 +38,113 @@
       left: 50%;
       transform: translateX(-50%);
       z-index: 20;
-
       padding: 14px 24px;
       font-size: 18px;
       font-weight: 700;
       border: none;
       border-radius: 14px;
       cursor: pointer;
-
-      background: rgba(0, 0, 0, 0.65);
+      background: rgba(0, 0, 0, 0.72);
       color: #fff;
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
       transition: 0.2s;
     }
 
     #playBtn:hover {
       transform: translateX(-50%) scale(1.05);
-      background: rgba(0, 0, 0, 0.82);
+      background: rgba(0, 0, 0, 0.86);
     }
 
     .lyrics-wrap {
       position: absolute;
       left: 50%;
-      top: 28%;
+      top: 22%;
       transform: translateX(-50%);
-      width: min(90vw, 900px);
+      width: min(92vw, 900px);
       z-index: 10;
       pointer-events: none;
     }
 
     .lyrics {
       position: relative;
-      min-height: 170px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
+      width: 100%;
+      height: 120px;
       overflow: hidden;
       text-align: center;
-      padding: 20px;
     }
 
     .lyric-line {
       position: absolute;
       left: 50%;
-      bottom: 0;
-      transform: translateX(-50%) translateY(42px);
-      width: 100%;
+      top: 50%;
+      transform: translate(-50%, 30px);
+      width: min(92vw, 760px);
 
-      font-size: clamp(24px, 3vw, 42px);
+      font-size: clamp(22px, 2.8vw, 40px);
       font-weight: 900;
-      line-height: 1.5;
+      line-height: 1.4;
       letter-spacing: 0.2px;
+      text-align: center;
+      color: #ffffff;
 
-      color: rgba(255, 255, 255, 0.58);
       text-shadow:
-        0 0 8px rgba(255, 255, 255, 0.55),
-        0 0 20px rgba(255, 255, 255, 0.30),
-        0 2px 10px rgba(0, 0, 0, 0.75),
-        0 4px 20px rgba(0, 0, 0, 0.55);
+        -2px -2px 0 #000,
+         2px -2px 0 #000,
+        -2px  2px 0 #000,
+         2px  2px 0 #000,
+         0 0 10px rgba(255,255,255,0.95),
+         0 0 20px rgba(0,0,0,0.75);
 
       opacity: 0;
       transition:
-        opacity 0.5s ease,
-        transform 1.2s ease,
-        color 0.35s ease,
-        text-shadow 0.35s ease;
+        opacity 0.35s ease,
+        transform 0.6s ease,
+        color 0.18s linear,
+        text-shadow 0.18s linear;
     }
 
     .lyric-line.show {
-      opacity: 0.72;
-      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      transform: translate(-50%, -50%);
     }
 
     .lyric-line.active {
-      opacity: 1;
-      color: #fff8c9;
+      color: #fff4a8;
       text-shadow:
-        0 0 10px rgba(255, 248, 201, 0.95),
-        0 0 22px rgba(255, 232, 140, 0.75),
-        0 0 36px rgba(255, 218, 90, 0.45),
-        0 2px 10px rgba(0, 0, 0, 0.85),
-        0 4px 22px rgba(0, 0, 0, 0.60);
+        -2px -2px 0 #000,
+         2px -2px 0 #000,
+        -2px  2px 0 #000,
+         2px  2px 0 #000,
+         0 0 14px rgba(255, 244, 168, 1),
+         0 0 26px rgba(255, 219, 90, 0.95),
+         0 0 36px rgba(255, 200, 60, 0.55);
     }
 
     .lyric-line.old {
-  opacity: 0;
-  transform: translateX(-50%) translateY(-60px);
-}
+      opacity: 0;
+      transform: translate(-50%, -90px);
+    }
 
     .word {
-      opacity: 0.42;
+      opacity: 0.65;
       transition:
-        opacity 0.15s linear,
-        color 0.15s linear,
-        text-shadow 0.15s linear;
+        opacity 0.1s linear,
+        color 0.1s linear,
+        text-shadow 0.1s linear;
     }
 
     .word.read {
       opacity: 1;
       color: #ffffff;
       text-shadow:
-        0 0 8px rgba(255,255,255,0.9),
-        0 0 16px rgba(255,235,150,0.8);
+        -1px -1px 0 #000,
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000,
+         0 0 10px rgba(255,255,255,1),
+         0 0 18px rgba(255,230,120,0.9);
     }
 
     audio {
@@ -156,39 +159,19 @@
       }
 
       .lyrics-wrap {
-        top: 23%;
-        width: 92vw;
+        top: 19%;
+        width: 94vw;
       }
 
       .lyrics {
-        min-height: 130px;
-        padding: 14px;
+        height: 100px;
       }
 
       .lyric-line {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%) translateY(42px);
-  width: 100%;
-
-  font-size: clamp(24px, 3vw, 42px);
-  font-weight: 900;
-
-  /* 🔥 chữ trắng rõ */
-  color: #ffffff;
-
-  /* 🔥 viền đen + glow mạnh */
-  text-shadow:
-    -2px -2px 0 #000,
-     2px -2px 0 #000,
-    -2px  2px 0 #000,
-     2px  2px 0 #000,
-     0 0 12px rgba(255,255,255,0.9);
-
-  opacity: 0;
-  transition: all 0.5s ease;
-}
+        width: 90vw;
+        font-size: clamp(18px, 5vw, 28px);
+        line-height: 1.35;
+      }
     }
   </style>
 </head>
@@ -230,7 +213,6 @@
     ];
 
     let lineNodes = [];
-    let currentIndex = -1;
 
     function createLyrics() {
       lyricsEl.innerHTML = "";
@@ -253,7 +235,7 @@
       });
     }
 
-    function resetWords() {
+    function clearWordHighlight() {
       lineNodes.forEach(line => {
         line.querySelectorAll(".word").forEach(word => {
           word.classList.remove("read");
@@ -262,7 +244,7 @@
     }
 
     function highlightWords(index, currentTime) {
-      resetWords();
+      clearWordHighlight();
 
       const item = subtitles[index];
       const line = lineNodes[index];
@@ -274,7 +256,7 @@
       const wordsToHighlight = Math.floor(progress * words.length);
 
       words.forEach((word, i) => {
-        if (i <= wordsToHighlight - 1) {
+        if (i < wordsToHighlight) {
           word.classList.add("read");
         }
       });
@@ -285,27 +267,20 @@
         line => currentTime >= line.start && currentTime <= line.end
       );
 
-      if (activeIndex !== currentIndex) {
-        currentIndex = activeIndex;
-      }
-
       lineNodes.forEach((node, index) => {
         node.classList.remove("show", "active", "old");
 
         if (index === activeIndex) {
           node.classList.add("show", "active");
         } else if (index < activeIndex) {
-  node.classList.add("old");
-}
-        } else if (index === activeIndex + 1) {
-          node.classList.add("show");
+          node.classList.add("old");
         }
       });
 
       if (activeIndex >= 0) {
         highlightWords(activeIndex, currentTime);
       } else {
-        resetWords();
+        clearWordHighlight();
       }
     }
 
@@ -329,8 +304,7 @@
 
     audio.addEventListener("ended", () => {
       playBtn.textContent = "Bấm để phát";
-      currentIndex = -1;
-      resetWords();
+      clearWordHighlight();
       lineNodes.forEach(node => {
         node.classList.remove("show", "active", "old");
       });
