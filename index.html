@@ -60,7 +60,7 @@
     .lyrics-wrap {
       position: absolute;
       left: 50%;
-      top: 22%;
+      top: 20%;
       transform: translateX(-50%);
       width: min(92vw, 900px);
       z-index: 10;
@@ -70,7 +70,7 @@
     .lyrics {
       position: relative;
       width: 100%;
-      height: 120px;
+      height: 190px;
       overflow: hidden;
       text-align: center;
     }
@@ -78,7 +78,7 @@
     .lyric-line {
       position: absolute;
       left: 50%;
-      top: 50%;
+      top: 56%;
       transform: translate(-50%, 30px);
       width: min(92vw, 760px);
 
@@ -107,7 +107,7 @@
 
     .lyric-line.show {
       opacity: 1;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -56%);
     }
 
     .lyric-line.active {
@@ -124,7 +124,7 @@
 
     .lyric-line.old {
       opacity: 0;
-      transform: translate(-50%, -90px);
+      transform: translate(-50%, -110px);
     }
 
     .word {
@@ -159,18 +159,23 @@
       }
 
       .lyrics-wrap {
-        top: 19%;
+        top: 18%;
         width: 94vw;
       }
 
       .lyrics {
-        height: 100px;
+        height: 170px;
       }
 
       .lyric-line {
         width: 90vw;
+        top: 55%;
         font-size: clamp(18px, 5vw, 28px);
         line-height: 1.35;
+      }
+
+      .lyric-line.show {
+        transform: translate(-50%, -55%);
       }
     }
   </style>
