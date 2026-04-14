@@ -124,9 +124,9 @@
     }
 
     .lyric-line.old {
-      opacity: 0;
-      transform: translateX(-50%) translateY(-46px);
-    }
+  opacity: 0;
+  transform: translateX(-50%) translateY(-60px);
+}
 
     .word {
       opacity: 0.42;
@@ -166,9 +166,29 @@
       }
 
       .lyric-line {
-        font-size: clamp(20px, 5vw, 30px);
-        line-height: 1.45;
-      }
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%) translateY(42px);
+  width: 100%;
+
+  font-size: clamp(24px, 3vw, 42px);
+  font-weight: 900;
+
+  /* 🔥 chữ trắng rõ */
+  color: #ffffff;
+
+  /* 🔥 viền đen + glow mạnh */
+  text-shadow:
+    -2px -2px 0 #000,
+     2px -2px 0 #000,
+    -2px  2px 0 #000,
+     2px  2px 0 #000,
+     0 0 12px rgba(255,255,255,0.9);
+
+  opacity: 0;
+  transition: all 0.5s ease;
+}
     }
   </style>
 </head>
@@ -274,8 +294,9 @@
 
         if (index === activeIndex) {
           node.classList.add("show", "active");
-        } else if (index === activeIndex - 1) {
-          node.classList.add("old");
+        } else if (index < activeIndex) {
+  node.classList.add("old");
+}
         } else if (index === activeIndex + 1) {
           node.classList.add("show");
         }
