@@ -34,7 +34,7 @@
 
     #playBtn {
       position: absolute;
-      top: 18%;
+      top: 10%;
       left: 50%;
       transform: translateX(-50%);
       z-index: 20;
@@ -46,22 +46,23 @@
       border-radius: 14px;
       cursor: pointer;
 
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.65);
       color: #fff;
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
       transition: 0.2s;
     }
 
     #playBtn:hover {
       transform: translateX(-50%) scale(1.05);
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.82);
     }
 
     .lyrics-wrap {
       position: absolute;
       left: 50%;
-      bottom: 12%;
+      top: 28%;
       transform: translateX(-50%);
       width: min(90vw, 900px);
       z-index: 10;
@@ -70,7 +71,7 @@
 
     .lyrics {
       position: relative;
-      min-height: 160px;
+      min-height: 170px;
       display: flex;
       align-items: flex-end;
       justify-content: center;
@@ -83,52 +84,64 @@
       position: absolute;
       left: 50%;
       bottom: 0;
-      transform: translateX(-50%) translateY(40px);
+      transform: translateX(-50%) translateY(42px);
       width: 100%;
 
-      font-size: clamp(22px, 3vw, 38px);
-      font-weight: 800;
+      font-size: clamp(24px, 3vw, 42px);
+      font-weight: 900;
       line-height: 1.5;
-      color: rgba(255, 255, 255, 0.35);
+      letter-spacing: 0.2px;
+
+      color: rgba(255, 255, 255, 0.58);
       text-shadow:
-        0 2px 8px rgba(0,0,0,0.5),
-        0 0 10px rgba(0,0,0,0.4);
+        0 0 8px rgba(255, 255, 255, 0.55),
+        0 0 20px rgba(255, 255, 255, 0.30),
+        0 2px 10px rgba(0, 0, 0, 0.75),
+        0 4px 20px rgba(0, 0, 0, 0.55);
 
       opacity: 0;
       transition:
         opacity 0.5s ease,
         transform 1.2s ease,
-        color 0.4s ease,
-        text-shadow 0.4s ease;
+        color 0.35s ease,
+        text-shadow 0.35s ease;
     }
 
     .lyric-line.show {
-      opacity: 0.65;
+      opacity: 0.72;
       transform: translateX(-50%) translateY(0);
     }
 
     .lyric-line.active {
       opacity: 1;
-      color: #fff7b2;
+      color: #fff8c9;
       text-shadow:
-        0 0 10px rgba(255, 244, 168, 0.8),
-        0 0 20px rgba(255, 244, 168, 0.7),
-        0 2px 14px rgba(0,0,0,0.7);
+        0 0 10px rgba(255, 248, 201, 0.95),
+        0 0 22px rgba(255, 232, 140, 0.75),
+        0 0 36px rgba(255, 218, 90, 0.45),
+        0 2px 10px rgba(0, 0, 0, 0.85),
+        0 4px 22px rgba(0, 0, 0, 0.60);
     }
 
     .lyric-line.old {
       opacity: 0;
-      transform: translateX(-50%) translateY(-45px);
+      transform: translateX(-50%) translateY(-46px);
     }
 
     .word {
-      opacity: 0.45;
-      transition: opacity 0.15s linear, color 0.15s linear;
+      opacity: 0.42;
+      transition:
+        opacity 0.15s linear,
+        color 0.15s linear,
+        text-shadow 0.15s linear;
     }
 
     .word.read {
       opacity: 1;
-      color: #fff;
+      color: #ffffff;
+      text-shadow:
+        0 0 8px rgba(255,255,255,0.9),
+        0 0 16px rgba(255,235,150,0.8);
     }
 
     audio {
@@ -137,19 +150,24 @@
 
     @media (max-width: 768px) {
       #playBtn {
-        top: 14%;
+        top: 8%;
         font-size: 16px;
         padding: 12px 20px;
       }
 
       .lyrics-wrap {
-        bottom: 10%;
+        top: 23%;
         width: 92vw;
       }
 
       .lyrics {
-        min-height: 120px;
+        min-height: 130px;
         padding: 14px;
+      }
+
+      .lyric-line {
+        font-size: clamp(20px, 5vw, 30px);
+        line-height: 1.45;
       }
     }
   </style>
@@ -173,25 +191,23 @@
     const playBtn = document.getElementById("playBtn");
     const lyricsEl = document.getElementById("lyrics");
 
-    // Thay nội dung + thời gian theo bản ghi âm của bạn
-    // start, end tính bằng giây
     const subtitles = [
-  { start: 0.0, end: 9.0, text: "Trong mỗi nhịp đập, cánh chim chiến giữa bầu trời Tổ quốc, có một cánh chim mang theo khát khao kiên cường, đó là Nguyễn Văn Bảy." },
-  { start: 9.0, end: 14.0, text: "Ông không phải sinh ra để bay, nhưng đã trở thành một huyền thoại trên bầu trời." },
-  { start: 14.0, end: 25.0, text: "Không phải bởi những lời ca ngợi, cuộc đời ông là bản anh hùng ca, với mồ hôi, nước mắt và những cánh bay không mỏi của ngày trở về." },
-  { start: 25.0, end: 30.0, text: "Cuốn sách Cánh Chim Bất Tử là chương hồi đầy cảm xúc," },
-  { start: 30.0, end: 36.0, text: "kể về người nông dân mang tâm hồn chất phác miền Tây, bằng lòng can trường và tình yêu nước," },
-  { start: 36.0, end: 39.0, text: "đã làm nên những chiến công khiến thế giới phải khâm phục." },
-  { start: 39.0, end: 44.0, text: "Qua từng trang viết, người đọc không chỉ thấy một phi công MiG-17," },
-  { start: 44.0, end: 52.0, text: "mà còn thấy một người cha, người đồng đội bình dị, sống khiêm nhường, yêu thương và cống hiến." },
-  { start: 52.0, end: 58.0, text: "Đây không chỉ là câu chuyện về một con người, mà là câu chuyện về tinh thần Việt Nam." },
-  { start: 58.0, end: 64.0, text: "Tinh thần kiên cường, giản dị, bất khuất." },
-  { start: 64.0, end: 69.0, text: "Cánh Chim Bất Tử không cần tô vẽ," },
-  { start: 69.0, end: 75.0, text: "bởi chính sự thật của cuộc đời ấy đã làm nên một huyền thoại." },
-  { start: 75.0, end: 80.0, text: "Đọc để cảm, để thương, để biết rằng có những con người đã bay lên vì đất nước," },
-  { start: 80.0, end: 86.0, text: "và dù đã nằm lại, họ vẫn không bao giờ rời khỏi trái tim nhân dân." },
-  { start: 86.0, end: 90.0, text: "Một cuốn sách khiến ta phải suy ngẫm, và trân trọng." }
-];
+      { start: 0.0, end: 9.0, text: "Trong mỗi nhịp đập, cánh chim chiến giữa bầu trời Tổ quốc, có một cánh chim mang theo khát khao kiên cường, đó là Nguyễn Văn Bảy." },
+      { start: 9.0, end: 14.0, text: "Ông không phải sinh ra để bay, nhưng đã trở thành một huyền thoại trên bầu trời." },
+      { start: 14.0, end: 25.0, text: "Không phải bởi những lời ca ngợi, cuộc đời ông là bản anh hùng ca, với mồ hôi, nước mắt và những cánh bay không mỏi của ngày trở về." },
+      { start: 25.0, end: 30.0, text: "Cuốn sách Cánh Chim Bất Tử là chương hồi đầy cảm xúc." },
+      { start: 30.0, end: 36.0, text: "Kể về người nông dân mang tâm hồn chất phác miền Tây, bằng lòng can trường và tình yêu nước." },
+      { start: 36.0, end: 39.0, text: "Đã làm nên những chiến công khiến thế giới phải khâm phục." },
+      { start: 39.0, end: 44.0, text: "Qua từng trang viết, người đọc không chỉ thấy một phi công MiG-17." },
+      { start: 44.0, end: 52.0, text: "Mà còn thấy một người cha, người đồng đội bình dị, sống khiêm nhường, yêu thương và cống hiến." },
+      { start: 52.0, end: 58.0, text: "Đây không chỉ là câu chuyện về một con người, mà là câu chuyện về tinh thần Việt Nam." },
+      { start: 58.0, end: 64.0, text: "Tinh thần kiên cường, giản dị, bất khuất." },
+      { start: 64.0, end: 69.0, text: "Cánh Chim Bất Tử không cần tô vẽ." },
+      { start: 69.0, end: 75.0, text: "Bởi chính sự thật của cuộc đời ấy đã làm nên một huyền thoại." },
+      { start: 75.0, end: 80.0, text: "Đọc để cảm, để thương, để biết rằng có những con người đã bay lên vì đất nước." },
+      { start: 80.0, end: 86.0, text: "Và dù đã nằm lại, họ vẫn không bao giờ rời khỏi trái tim nhân dân." },
+      { start: 86.0, end: 90.0, text: "Một cuốn sách khiến ta phải suy ngẫm, và trân trọng." }
+    ];
 
     let lineNodes = [];
     let currentIndex = -1;
@@ -214,6 +230,33 @@
 
         lyricsEl.appendChild(line);
         return line;
+      });
+    }
+
+    function resetWords() {
+      lineNodes.forEach(line => {
+        line.querySelectorAll(".word").forEach(word => {
+          word.classList.remove("read");
+        });
+      });
+    }
+
+    function highlightWords(index, currentTime) {
+      resetWords();
+
+      const item = subtitles[index];
+      const line = lineNodes[index];
+      if (!item || !line) return;
+
+      const words = line.querySelectorAll(".word");
+      const duration = item.end - item.start;
+      const progress = Math.max(0, Math.min(1, (currentTime - item.start) / duration));
+      const wordsToHighlight = Math.floor(progress * words.length);
+
+      words.forEach((word, i) => {
+        if (i <= wordsToHighlight - 1) {
+          word.classList.add("read");
+        }
       });
     }
 
@@ -243,33 +286,6 @@
       } else {
         resetWords();
       }
-    }
-
-    function resetWords() {
-      lineNodes.forEach(line => {
-        line.querySelectorAll(".word").forEach(word => {
-          word.classList.remove("read");
-        });
-      });
-    }
-
-    function highlightWords(index, currentTime) {
-      resetWords();
-
-      const item = subtitles[index];
-      const line = lineNodes[index];
-      if (!item || !line) return;
-
-      const words = line.querySelectorAll(".word");
-      const duration = item.end - item.start;
-      const progress = Math.max(0, Math.min(1, (currentTime - item.start) / duration));
-      const wordsToHighlight = Math.floor(progress * words.length);
-
-      words.forEach((word, i) => {
-        if (i <= wordsToHighlight - 1) {
-          word.classList.add("read");
-        }
-      });
     }
 
     playBtn.addEventListener("click", async () => {
