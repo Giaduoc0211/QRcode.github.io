@@ -6,87 +6,300 @@
   <title>Phát audio</title>
 
   <style>
-    body {
-      margin: 0;
-      font-family: system-ui, sans-serif;
-      min-height: 100dvh;
-      overflow: hidden;
-
-      background: url("canhchim.jpg") no-repeat center/cover;
+    * {
+      box-sizing: border-box;
     }
 
-    /* container full màn hình */
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: system-ui, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: url("canhchim.jpg") no-repeat center center / cover;
+      position: relative;
+    }
+
     .container {
       position: relative;
       width: 100%;
+      height: 100vh;
       height: 100dvh;
     }
 
-    /* nút */
-    button {
+    #playBtn {
       position: absolute;
-
-      /* 🔥 chỉnh vị trí tại đây */
-      top: 18%;          /* kéo lên cao */
+      top: 18%;
       left: 50%;
       transform: translateX(-50%);
+      z-index: 20;
 
       padding: 14px 24px;
       font-size: 18px;
-      font-weight: bold;
+      font-weight: 700;
       border: none;
       border-radius: 14px;
       cursor: pointer;
 
       background: rgba(0, 0, 0, 0.6);
       color: #fff;
-
       backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
       transition: 0.2s;
     }
 
-    button:hover {
+    #playBtn:hover {
       transform: translateX(-50%) scale(1.05);
-      background: rgba(0,0,0,0.8);
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .lyrics-wrap {
+      position: absolute;
+      left: 50%;
+      bottom: 12%;
+      transform: translateX(-50%);
+      width: min(90vw, 900px);
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .lyrics {
+      position: relative;
+      min-height: 160px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      overflow: hidden;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .lyric-line {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%) translateY(40px);
+      width: 100%;
+
+      font-size: clamp(22px, 3vw, 38px);
+      font-weight: 800;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.35);
+      text-shadow:
+        0 2px 8px rgba(0,0,0,0.5),
+        0 0 10px rgba(0,0,0,0.4);
+
+      opacity: 0;
+      transition:
+        opacity 0.5s ease,
+        transform 1.2s ease,
+        color 0.4s ease,
+        text-shadow 0.4s ease;
+    }
+
+    .lyric-line.show {
+      opacity: 0.65;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .lyric-line.active {
+      opacity: 1;
+      color: #fff7b2;
+      text-shadow:
+        0 0 10px rgba(255, 244, 168, 0.8),
+        0 0 20px rgba(255, 244, 168, 0.7),
+        0 2px 14px rgba(0,0,0,0.7);
+    }
+
+    .lyric-line.old {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-45px);
+    }
+
+    .word {
+      opacity: 0.45;
+      transition: opacity 0.15s linear, color 0.15s linear;
+    }
+
+    .word.read {
+      opacity: 1;
+      color: #fff;
     }
 
     audio {
       display: none;
     }
 
-    /* 📱 mobile chỉnh lại chút */
     @media (max-width: 768px) {
-      button {
-        top: 12%;   /* mobile kéo cao hơn nữa */
+      #playBtn {
+        top: 14%;
         font-size: 16px;
         padding: 12px 20px;
+      }
+
+      .lyrics-wrap {
+        bottom: 10%;
+        width: 92vw;
+      }
+
+      .lyrics {
+        min-height: 120px;
+        padding: 14px;
       }
     }
   </style>
 </head>
-
 <body>
   <div class="container">
     <button id="playBtn">Bấm để phát</button>
 
+    <div class="lyrics-wrap">
+      <div class="lyrics" id="lyrics"></div>
+    </div>
+
     <audio id="audio">
-      <source src="audio.aac" type="audio/aac" />
+      <source src="audio.m4a" type="audio/mp4" />
+      Trình duyệt của bạn không hỗ trợ audio.
     </audio>
   </div>
 
   <script>
-    const audio = document.getElementById('audio');
-    const playBtn = document.getElementById('playBtn');
+    const audio = document.getElementById("audio");
+    const playBtn = document.getElementById("playBtn");
+    const lyricsEl = document.getElementById("lyrics");
 
-    playBtn.addEventListener('click', async () => {
-      if (audio.paused) {
-        await audio.play();
-        playBtn.textContent = "Đang phát";
+    // Thay nội dung + thời gian theo bản ghi âm của bạn
+    // start, end tính bằng giây
+    const subtitles = [
+  { start: 0.0, end: 9.0, text: "Trong mỗi nhịp đập, cánh chim chiến giữa bầu trời Tổ quốc, có một cánh chim mang theo khát khao kiên cường, đó là Nguyễn Văn Bảy." },
+  { start: 9.0, end: 14.0, text: "Ông không phải sinh ra để bay, nhưng đã trở thành một huyền thoại trên bầu trời." },
+  { start: 14.0, end: 25.0, text: "Không phải bởi những lời ca ngợi, cuộc đời ông là bản anh hùng ca, với mồ hôi, nước mắt và những cánh bay không mỏi của ngày trở về." },
+  { start: 25.0, end: 30.0, text: "Cuốn sách Cánh Chim Bất Tử là chương hồi đầy cảm xúc," },
+  { start: 30.0, end: 36.0, text: "kể về người nông dân mang tâm hồn chất phác miền Tây, bằng lòng can trường và tình yêu nước," },
+  { start: 36.0, end: 39.0, text: "đã làm nên những chiến công khiến thế giới phải khâm phục." },
+  { start: 39.0, end: 44.0, text: "Qua từng trang viết, người đọc không chỉ thấy một phi công MiG-17," },
+  { start: 44.0, end: 52.0, text: "mà còn thấy một người cha, người đồng đội bình dị, sống khiêm nhường, yêu thương và cống hiến." },
+  { start: 52.0, end: 58.0, text: "Đây không chỉ là câu chuyện về một con người, mà là câu chuyện về tinh thần Việt Nam." },
+  { start: 58.0, end: 64.0, text: "Tinh thần kiên cường, giản dị, bất khuất." },
+  { start: 64.0, end: 69.0, text: "Cánh Chim Bất Tử không cần tô vẽ," },
+  { start: 69.0, end: 75.0, text: "bởi chính sự thật của cuộc đời ấy đã làm nên một huyền thoại." },
+  { start: 75.0, end: 80.0, text: "Đọc để cảm, để thương, để biết rằng có những con người đã bay lên vì đất nước," },
+  { start: 80.0, end: 86.0, text: "và dù đã nằm lại, họ vẫn không bao giờ rời khỏi trái tim nhân dân." },
+  { start: 86.0, end: 90.0, text: "Một cuốn sách khiến ta phải suy ngẫm, và trân trọng." }
+];
+
+    let lineNodes = [];
+    let currentIndex = -1;
+
+    function createLyrics() {
+      lyricsEl.innerHTML = "";
+
+      lineNodes = subtitles.map((item, index) => {
+        const line = document.createElement("div");
+        line.className = "lyric-line";
+        line.dataset.index = index;
+
+        const words = item.text.split(" ");
+        words.forEach((word, i) => {
+          const span = document.createElement("span");
+          span.className = "word";
+          span.textContent = word + (i < words.length - 1 ? " " : "");
+          line.appendChild(span);
+        });
+
+        lyricsEl.appendChild(line);
+        return line;
+      });
+    }
+
+    function updateLyrics(currentTime) {
+      const activeIndex = subtitles.findIndex(
+        line => currentTime >= line.start && currentTime <= line.end
+      );
+
+      if (activeIndex !== currentIndex) {
+        currentIndex = activeIndex;
+      }
+
+      lineNodes.forEach((node, index) => {
+        node.classList.remove("show", "active", "old");
+
+        if (index === activeIndex) {
+          node.classList.add("show", "active");
+        } else if (index === activeIndex - 1) {
+          node.classList.add("old");
+        } else if (index === activeIndex + 1) {
+          node.classList.add("show");
+        }
+      });
+
+      if (activeIndex >= 0) {
+        highlightWords(activeIndex, currentTime);
       } else {
-        audio.pause();
-        playBtn.textContent = "Bấm để phát";
+        resetWords();
+      }
+    }
+
+    function resetWords() {
+      lineNodes.forEach(line => {
+        line.querySelectorAll(".word").forEach(word => {
+          word.classList.remove("read");
+        });
+      });
+    }
+
+    function highlightWords(index, currentTime) {
+      resetWords();
+
+      const item = subtitles[index];
+      const line = lineNodes[index];
+      if (!item || !line) return;
+
+      const words = line.querySelectorAll(".word");
+      const duration = item.end - item.start;
+      const progress = Math.max(0, Math.min(1, (currentTime - item.start) / duration));
+      const wordsToHighlight = Math.floor(progress * words.length);
+
+      words.forEach((word, i) => {
+        if (i <= wordsToHighlight - 1) {
+          word.classList.add("read");
+        }
+      });
+    }
+
+    playBtn.addEventListener("click", async () => {
+      try {
+        if (audio.paused) {
+          await audio.play();
+          playBtn.textContent = "Đang phát";
+        } else {
+          audio.pause();
+          playBtn.textContent = "Bấm để phát";
+        }
+      } catch (err) {
+        playBtn.textContent = "Không phát được";
       }
     });
+
+    audio.addEventListener("timeupdate", () => {
+      updateLyrics(audio.currentTime);
+    });
+
+    audio.addEventListener("ended", () => {
+      playBtn.textContent = "Bấm để phát";
+      currentIndex = -1;
+      resetWords();
+      lineNodes.forEach(node => {
+        node.classList.remove("show", "active", "old");
+      });
+    });
+
+    createLyrics();
   </script>
 </body>
 </html>
