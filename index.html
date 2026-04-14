@@ -14,6 +14,7 @@
       display: grid;
       place-items: center;
     }
+
     .box {
       width: min(92vw, 460px);
       text-align: center;
@@ -22,8 +23,16 @@
       background: #1b1b1b;
       box-shadow: 0 10px 30px rgba(0,0,0,.35);
     }
-    h1 { margin-top: 0; }
-    p { line-height: 1.5; opacity: .9; }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    p {
+      line-height: 1.5;
+      opacity: .9;
+    }
+
     button {
       font-size: 18px;
       padding: 14px 20px;
@@ -34,8 +43,8 @@
       color: #111;
       font-weight: 700;
       margin-top: 12px;
-      display: none;
     }
+
     audio {
       width: 100%;
       margin-top: 16px;
@@ -45,9 +54,10 @@
 <body>
   <div class="box">
     <h1>CÁNH CHIM BẤT TỬ</h1>
-    <p id="status">Đang thử tự phát audio...</p>
+    <p id="status">Bấm nút để phát audio.</p>
     <button id="playBtn">Bấm để phát</button>
-    <audio id="audio" autoplay playsinline controls>
+
+    <audio id="audio" playsinline controls>
       <source src="audio.aac" type="audio/aac" />
       Trình duyệt của bạn không hỗ trợ audio.
     </audio>
@@ -57,48 +67,17 @@
     const audio = document.getElementById('audio');
     const status = document.getElementById('status');
     const playBtn = document.getElementById('playBtn');
-    let started = false;
-    let blocked = false;
 
     async function doPlay() {
-      if (started) return true;
       try {
         await audio.play();
-        started = true;
         status.textContent = 'Đang phát audio.';
-        playBtn.style.display = 'none';
-        return true;
       } catch (err) {
-        return false;
-      }
-    }
-
-    async function tryAutoPlay() {
-      const ok = await doPlay();
-      if (!ok) {
-        blocked = true;
-<<<<<<< HEAD
-        status.textContent = ' ';
-=======
-        status.textContent = 'Trình duyệt chặn tự phát.';
->>>>>>> b77675d7e1f0e293a6ae46d1db4e9219104f8351
-      }
-    }
-
-    async function handleGesture() {
-      if (!blocked || started) return;
-      const ok = await doPlay();
-      if (!ok) {
-        playBtn.style.display = 'inline-block';
-        status.textContent = 'Không tự phát được. Bấm nút để phát.';
+        status.textContent = 'Không phát được audio.';
       }
     }
 
     playBtn.addEventListener('click', doPlay);
-    window.addEventListener('load', tryAutoPlay);
-    document.addEventListener('click', handleGesture, true);
-    document.addEventListener('touchstart', handleGesture, true);
-    document.addEventListener('pointerdown', handleGesture, true);
   </script>
 </body>
 </html>
