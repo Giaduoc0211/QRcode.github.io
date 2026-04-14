@@ -41,18 +41,6 @@
       padding: 24px;
     }
 
-<<<<<<< HEAD
-=======
-    h1 {
-      margin-top: 0;
-    }
-
-    p {
-      line-height: 1.5;
-      opacity: .9;
-    }
-
->>>>>>> 697df52a8c974a1a61bcb617f34e9bcabbff9e80
     button {
       appearance: none;
       -webkit-appearance: none;
@@ -62,7 +50,6 @@
       padding: 16px 28px;
       font-size: 20px;
       font-weight: 700;
-<<<<<<< HEAD
       border-radius: 16px;
 
       background: rgba(0, 0, 0, 0.55);
@@ -98,30 +85,14 @@
         font-size: 18px;
         border-radius: 14px;
       }
-=======
-      margin-top: 12px;
-    }
-
-    audio {
-      width: 100%;
-      margin-top: 16px;
->>>>>>> 697df52a8c974a1a61bcb617f34e9bcabbff9e80
     }
   </style>
 </head>
 <body>
   <div class="box">
-<<<<<<< HEAD
     <button id="playBtn">Bấm để phát</button>
 
     <audio id="audio">
-=======
-    <h1>CÁNH CHIM BẤT TỬ</h1>
-    <p id="status">Bấm nút để phát audio.</p>
-    <button id="playBtn">Bấm để phát</button>
-
-    <audio id="audio" playsinline controls>
->>>>>>> 697df52a8c974a1a61bcb617f34e9bcabbff9e80
       <source src="audio.aac" type="audio/aac" />
       Trình duyệt của bạn không hỗ trợ audio.
     </audio>
@@ -131,7 +102,6 @@
     const audio = document.getElementById('audio');
     const playBtn = document.getElementById('playBtn');
 
-<<<<<<< HEAD
     playBtn.addEventListener('click', async () => {
       try {
         if (audio.paused) {
@@ -149,18 +119,6 @@
     audio.addEventListener('ended', () => {
       playBtn.textContent = 'Bấm để phát';
     });
-=======
-    async function doPlay() {
-      try {
-        await audio.play();
-        status.textContent = 'Đang phát audio.';
-      } catch (err) {
-        status.textContent = 'Không phát được audio.';
-      }
-    }
-
-    playBtn.addEventListener('click', doPlay);
->>>>>>> 697df52a8c974a1a61bcb617f34e9bcabbff9e80
   </script>
 </body>
 </html>
